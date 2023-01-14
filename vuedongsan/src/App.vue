@@ -1,31 +1,40 @@
 <template>
   <div>
     <div class="black-bg" v-if="ismodal" @click="ismodal = false">
-      <div class="white-bg">
-        <h4>{{ data[detailnum].title}}</h4>
-        <p>{{ data[detailnum].content}}</p>
-      </div>
+      <MoDal :detailnum="detailnum" :data="data" />
+      <!-- <div class="white-bg">
+        <img :src="data[detailnum].image" />
+        <h4>{{ data[detailnum].title }}</h4>
+        <p>{{ data[detailnum].content }}</p>
+      </div> -->
     </div>
+
     <div class="menu">
       <a v-for="(menu, i) in menus" :key="i">{{ menu }}</a>
     </div>
 
-    <h4 v-for="(dat, i) in data" :key="i">
-      <img @click="ismodal = true, detailnum = i" :src="dat.image" class="room-img" />
-      <p>{{ dat.title }}</p>
-      <p>{{ dat.price }} 원</p>
-    </h4>
+    <DisCount />
+
+    <p v-for="(dat, i) in data" :key="i">
+      <CaRd 
+      :dat="dat" 
+      @openModal="ismodal=true; detailnum = $event"
+      />
+    </p>
   </div>
 </template>
 
 <script>
 import datas from "./assets/oneroom";
+import DisCount from "./components/DisCount";
+import MoDal from "./components/MoDal";
+import CaRd from "./components/CaRd";
 
 export default {
   name: "App",
   data() {
     return {
-      detailnum : 0,
+      detailnum: 0,
       data: datas,
       ismodal: false,
       num: [0, 0, 0],
@@ -34,6 +43,9 @@ export default {
     };
   },
   components: {
+    DisCount: DisCount,
+    MoDal: MoDal,
+    CaRd: CaRd,
   },
 };
 </script>
@@ -76,10 +88,5 @@ div {
 .menu a {
   color: white;
   padding: 10px;
-}
-
-.room-img {
-  width: 100%;
-  margin-top: 40px;
 }
 </style>
