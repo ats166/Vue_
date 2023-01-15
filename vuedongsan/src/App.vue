@@ -13,12 +13,22 @@
       <a v-for="(menu, i) in menus" :key="i">{{ menu }}</a>
     </div>
 
-    <DisCount />
+    <DisCount 
+     v-if="showDiscount"
+    />
+
+    <button @click="pricesort">가격순 정렬</button>
+    <button @click="pricereversesort">가격 역순 정렬</button>
+    <button @click="stringsort">가나다순 정렬</button>
+    <button @click="returndata">되돌리기</button>
 
     <p v-for="(dat, i) in data" :key="i">
-      <CaRd 
-      :dat="dat" 
-      @openModal="ismodal=true; detailnum = $event"
+      <CaRd
+        :dat="dat"
+        @openModal="
+          ismodal = true;
+          detailnum = $event;
+        "
       />
     </p>
   </div>
@@ -30,15 +40,17 @@ import DisCount from "./components/DisCount";
 import MoDal from "./components/MoDal";
 import CaRd from "./components/CaRd";
 
+
+
 export default {
   name: "App",
   data() {
     return {
+      originaldata : [...datas],
+      showDiscount : true,
       detailnum: 0,
       data: datas,
       ismodal: false,
-      num: [0, 0, 0],
-      products: ["역삼동원룸", "천호동원룸", "마포구원룸"],
       menus: ["Home", "Shop", "About"],
     };
   },
@@ -46,6 +58,29 @@ export default {
     DisCount: DisCount,
     MoDal: MoDal,
     CaRd: CaRd,
+  },
+  methods: {
+    pricesort() {
+      this.data.sort((a, b) => {
+        return a.price - b.price;
+      });
+    },
+    pricereversesort() {
+      this.data.sort((a,b) => {
+        return b.price - a.price
+      })
+    },
+    stringsort() {
+      this.data.sort((a,b) => {
+        console.log(a.title, b.title);
+        if (a.title < b.title) {
+          return -1
+        }
+      })
+    },
+    returndata() {
+      this.data = [...this.originaldata]
+    },
   },
 };
 </script>

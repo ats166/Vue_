@@ -30,11 +30,16 @@ export default {
         this.month = 0
       }
       if (afterinput >= 13) {
-        alert('tq')
+        alert('13개월 이상은 입력할 수 없습니다')
         this.month = beforeinput
       }
     },
   },
+  beforeUpdate() {
+    if (this.month == 2) {
+      alert('3이상 입력해주세요')
+    }
+  }
 };
 </script>
 
