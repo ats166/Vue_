@@ -2,7 +2,7 @@
   <div>
     <div v-for="(dat,i) in data" :key = "i">
       <h5 @click="$router.push(`/detail/${i}`)">{{ dat.title }}</h5>
-      <p>{{ dat.content }}</p>
+      <p>{{ dat.content }}dd</p>
       <h6 class="mb-5">{{ dat.date }}</h6>
     </div>
   </div>
