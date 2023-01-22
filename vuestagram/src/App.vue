@@ -1,17 +1,16 @@
 <template>
   <div>
     <div class="header">
-      <ul class="header-button-left">
+      <ul class="header-button-left" @click="step -= 1">
         <li>Cancel</li>
       </ul>
       <ul class="header-button-right">
-        <li>Next</li>
+        <li v-if="step < 2" @click="step += 1">Next</li>
+        <li v-else @click="publish">발행</li>
       </ul>
       <img src="./assets/logo.png" class="logo" />
     </div>
-    <div v-if="step == 0"
-    :step = "step"
-    >
+    <div v-if="step == 0" :step="step">
       <ContainerList :data="data" />
       <button v-if="num <= 1" @click="moredata(), (this.num += 1)">
         더 보기
@@ -19,13 +18,14 @@
     </div>
     <!-- 필터선택페이지 -->
     <div v-if="step == 1">
-      <div class="upload-image"></div>
+      <div
+        :class="`${filters} upload-image`"
+        :style="`background-image:url(${this.url})`"
+      ></div>
       <div class="filters">
-        <div class="filter-1"></div>
-        <div class="filter-1"></div>
-        <div class="filter-1"></div>
-        <div class="filter-1"></div>
-        <div class="filter-1"></div>
+        <FilterBox v-for="a in filter" :key="a" :filters="a" :url="url">
+          {{a}}
+        </FilterBox>
       </div>
     </div>
 
@@ -33,7 +33,9 @@
     <div v-if="step == 2">
       <div class="upload-image"></div>
       <div class="write">
-        <textarea class="write-box">write!</textarea>
+        <textarea @input="hoho($event.target.value)" class="write-box">
+write!</textarea
+        >
       </div>
     </div>
 
@@ -50,6 +52,7 @@
 import ContainerList from "./components/ContainerList";
 import Mydata from "./assets/Mydata.js";
 import axios from "axios";
+import FilterBox from "./components/FilterBox";
 
 export default {
   name: "App",
@@ -58,10 +61,47 @@ export default {
       step: 0,
       data: Mydata,
       num: 0,
+      url: null,
+      content: null,
+      filter: [
+        "aden",
+        "_1977",
+        "brannan",
+        "brooklyn",
+        "clarendon",
+        "earlybird",
+        "gingham",
+        "hudson",
+        "inkwell",
+        "kelvin",
+        "lark",
+        "lofi",
+        "maven",
+        "mayfair",
+        "moon",
+        "nashville",
+        "perpetua",
+        "reyes",
+        "rise",
+        "slumber",
+        "stinson",
+        "toaster",
+        "valencia",
+        "walden",
+        "willow",
+        "xpro2",
+      ],
+      filters : null
     };
   },
   components: {
     ContainerList,
+    FilterBox,
+  },
+  mounted(){
+    this.emitter.on('filters', (filters) => {
+      this.filters = filters
+    })
   },
   methods: {
     moredata() {
@@ -75,12 +115,29 @@ export default {
         });
     },
     upload(e) {
-      let file = e.target.files
+      let file = e.target.files;
       console.log(file[0]);
-      let url = URL.createObjectURL(file[0])
-      console.log(url);
-      this.step += 1
-    }
+      this.url = URL.createObjectURL(file[0]);
+      console.log(this.url);
+      this.step += 1;
+    },
+    publish() {
+      let Article = {
+        name: "Kim Hyun",
+        userImage: "https://placeimg.com/100/100/arch",
+        postImage: `${this.url}`,
+        likes: 36,
+        date: "May 15",
+        liked: false,
+        content: `${this.content}`,
+        filter: "perpetua",
+      };
+      this.data.unshift(Article);
+      this.step = 0;
+    },
+    hoho(e) {
+      this.content = e;
+    },
   },
 };
 </script>

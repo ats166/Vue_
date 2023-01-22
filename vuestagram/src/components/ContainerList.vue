@@ -18,7 +18,8 @@ export default {
   },
   props : {
     data : Array,
-    step : Number
+    step : Number,
+    url : String,
   }
 
 };
