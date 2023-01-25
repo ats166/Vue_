@@ -24,7 +24,7 @@
       ></div>
       <div class="filters">
         <FilterBox v-for="a in filter" :key="a" :filters="a" :url="url">
-          {{a}}
+          {{ a }}
         </FilterBox>
       </div>
     </div>
@@ -91,17 +91,17 @@ export default {
         "willow",
         "xpro2",
       ],
-      filters : null
+      filters: null,
     };
   },
   components: {
     ContainerList,
     FilterBox,
   },
-  mounted(){
-    this.emitter.on('filters', (filters) => {
-      this.filters = filters
-    })
+  mounted() {
+    this.emitter.on("filters", (filters) => {
+      this.filters = filters;
+    });
   },
   methods: {
     moredata() {
